@@ -28,4 +28,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
        name: scan-report
-       path: results.sarif    
+       path: results.html   
