@@ -15,19 +15,17 @@ jobs:
     - name: run KICS Scan
       continue-on-error: true
       run: |
-       sudo mkdir path
        docker pull checkmarx/kics:latest
        docker run -u $UID:$GID -v $PWD:/$GITHUB_WORKSPACE checkmarx/kics:ubi8 scan -p $GITHUB_WORKSPACE/terraform --report-formats "all" -o /$GITHUB_WORKSPACE -v
-      
-       
-     - name: Upload KICS scan results to GitHub Security tab
-       uses: github/codeql-action/upload-sarif@v2
-       if: always() 
-       with:
-          sarif_file: 'results.sarif'
+    
+    - name: Upload KICS scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      if: always() 
+      with:
+       sarif_file: 'results.sarif'
           
-     - name: Archive Scan results
-       uses: actions/upload-artifact@v2
-       with:
-         name: scan-report
-         path: results.sarif    
+    - name: Archive Scan results
+      uses: actions/upload-artifact@v2
+      with:
+       name: scan-report
+       path: results.sarif    
