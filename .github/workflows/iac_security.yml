@@ -17,7 +17,7 @@ jobs:
       run: |
        docker pull checkmarx/kics:latest
        docker run -u $UID:$GID -v $PWD:/$GITHUB_WORKSPACE checkmarx/kics:ubi8 scan -p $GITHUB_WORKSPACE/terraform,$GITHUB_WORKSPACE/cft  --report-formats "all" -o /$GITHUB_WORKSPACE -v
-    
+       docker run -u $UID:$GID -v $PWD:/$GITHUB_WORKSPACE checkmarx/kics:ubi8 remediate --include-ids "4a1e6b34-1008-4e61-a5f2-1f7c276f8d14"
     - name: Upload KICS scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v2
       if: always() 
