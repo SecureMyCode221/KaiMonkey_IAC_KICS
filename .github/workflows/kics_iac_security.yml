@@ -15,21 +15,21 @@ jobs:
     - name: run KICS Scan
       continue-on-error: true
       run: |
-       sudo mkdir $GITHUB_WORKSPACE/results
-       sudo chmod -R a+rwx $GITHUB_WORKSPACE/results
+       sudo mkdir $GITHUB_WORKSPACE/scan_output
+       sudo chmod -R a+rwx $GITHUB_WORKSPACE/scan_output
        docker pull checkmarx/kics:latest
-       docker run -u $UID:$GID -v $PWD:/$GITHUB_WORKSPACE checkmarx/kics:ubi8 scan -p $GITHUB_WORKSPACE/terraform,$GITHUB_WORKSPACE/cft  --report-formats "all" --ignore-on-exit "all" -o /$GITHUB_WORKSPACE/results -v
+       docker run -u $UID:$GID -v $PWD:/$GITHUB_WORKSPACE checkmarx/kics:ubi8 scan -p $GITHUB_WORKSPACE/terraform,$GITHUB_WORKSPACE/cft  --report-formats "all" --ignore-on-exit "all" -o /$GITHUB_WORKSPACE/scan_output -v
      #  echo "Remediating issues"
-     #  docker run -u $UID:$GID -v $PWD:/$GITHUB_WORKSPACE checkmarx/kics:ubi8 remediate --include-ids "all" --results "${GITHUB_WORKSPACE}/results.json" -v
+     #  docker run -u $UID:$GID -v $PWD:/$GITHUB_WORKSPACE checkmarx/kics:ubi8 remediate --include-ids "all" --results "${GITHUB_WORKSPACE}/scan_output/results.json" -v
     
     - name: Upload KICS scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v2
       if: always() 
       with:
-       sarif_file: '${GITHUB_WORKSPACE}/results/results.sarif'
+       sarif_file: '$GITHUB_WORKSPACE/scan_output/results.sarif'
           
     - name: Archive Scan results
       uses: actions/upload-artifact@v2
       with:
        name: scan-reports
-       path: /$GITHUB_WORKSPACE/results/*.*   
+       path: /$GITHUB_WORKSPACE/scan_output/*.*   
