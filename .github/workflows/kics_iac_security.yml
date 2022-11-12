@@ -1,4 +1,4 @@
-name: KICS Infrastructure as Code Security Scan
+name: KICS Infrastructure as Code Security Scan!!
 
 on:
   push:
